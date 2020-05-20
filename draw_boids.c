@@ -3,52 +3,43 @@
 void	draw_boids(SDL_Renderer *renderer, t_boid **boid, int number)
 {
 	int i;
-	float	x;
-	float	y;
+	float	hx;
+	float	hy;
 	float	lx;
 	float	ly;
 	float	rx;
 	float	ry;
-	float	mx;
-	float	my;
+	float cx;
+	float cy;
+	float dist;
+	//float	mx;
+	//float	my;
 
 	int	dir;
 	i = 0;
 	while (i < number)
 	{
-		
-		x = boid[i] -> head.x;
-		y = boid[i] -> head.y;
-		
-		lx = boid[i] -> head.x - cos((boid[i] -> direction + 15) * 0.0174533)*20;
-		ly = boid[i] -> head.y - sin((boid[i] -> direction + 15) * 0.0174533)*20;
 
-		rx = boid[i] -> head.x - cos((boid[i] -> direction - 15) * 0.0174533)*20;
-		ry = boid[i] -> head.y - sin((boid[i] -> direction - 15) * 0.0174533)*20;
+		hx = boid[i] -> center.x + cos(boid[i] -> direction)*10;
+		hy = boid[i] -> center.y + sin(boid[i] -> direction)*10;
+	//	printf("boid %i, %f, %f,\n", i, hx, hy);
+		lx = boid[i] -> center.x - cos(boid[i] -> direction + 0.523599)*10;
+		ly = boid[i] -> center.y - sin(boid[i] -> direction + 0.523599)*10;
 
-		mx = boid[i] -> head.x - cos((boid[i] -> direction) * 0.0174533)*10;
-		my = boid[i] -> head.y - sin((boid[i] -> direction) * 0.0174533)*10;
-		
+		rx = boid[i] -> center.x - cos(boid[i] -> direction - 0.523599)*10;
+		ry = boid[i] -> center.y - sin(boid[i] -> direction - 0.523599)*10;
+
+
 		dir = boid[i] -> direction;
 
+		dist = round(sqrt(pow(hx - boid[i] -> center.x, 2) + pow(hy - boid[i] -> center.y, 2)));
 
-		SDL_RenderDrawLine(renderer, x, y, lx, ly);
-		SDL_RenderDrawLine(renderer, x, y, rx, ry);
+		SDL_RenderDrawLine(renderer, hx, hy, lx, ly);
+		SDL_RenderDrawLine(renderer, hx, hy, rx, ry);
 
-		SDL_RenderDrawLine(renderer, lx, ly, mx, my);
-		SDL_RenderDrawLine(renderer, rx, ry, mx, my);
+		SDL_RenderDrawLine(renderer, lx, ly, boid[i] -> center.x, boid[i] -> center.y);
+		SDL_RenderDrawLine(renderer, rx, ry, boid[i] -> center.x, boid[i] -> center.y);
 
-
-		//SDL_RenderDrawLine(renderer, x, y, rx, ry);
-
-
-		//SDL_RenderDrawLine(renderer, x, y, x-cos(dir)*-10 , y-sin(dir)*20);
-		//SDL_RenderDrawLine(renderer, x, y, x-cos(dir)*10, y-sin(dir)* 20);
-
-
-		//SDL_RenderDrawLine(renderer, x-10, y+20, x, y+10);
-		//SDL_RenderDrawLine(renderer, x+10, y+20, x, y+10);
-		
 
 		i++;
 	}
