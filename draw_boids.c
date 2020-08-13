@@ -12,8 +12,6 @@ void	draw_boids(SDL_Renderer *renderer, t_boid **boid, int number)
 	float cx;
 	float cy;
 	float dist;
-	//float	mx;
-	//float	my;
 
 	int	dir;
 	i = 0;

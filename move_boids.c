@@ -30,47 +30,15 @@ int	handle_EOW(t_boid **array, int i)
 
 void	handle_dir(t_boid *boid)
 {
-	float x;
-	float y;
-	float cx, cy;
-	float rad;
+	t_point new;
+	new.x = boid -> dir.x + boid-> avoidForce.x;
+	new.y = boid -> dir.y + boid-> avoidForce.y;
+	normalize(&new);
 
-
-	x = boid -> center.x;
-	y = boid -> center.y;
-
-	rad = boid -> direction;
-
-	boid -> center.x  += boid -> dir.x*0.25;
-	boid -> center.y += boid -> dir.y*0.25;
+	boid -> center.x += new.x * boid -> speed;
+	boid -> center.y += new.y * boid -> speed;
 }
 
-void	update_direction(t_boid **array, int number, int index)
-{
-	int i;
-	int check;
-	float dist;
-	float newdist;
-
-	i = 0;
-	dist = -1;
-	while(i < number)
-	{
-		if (array[i] -> id != array[index] -> id)
-		{
-			newdist = sqrt(pow(array[i] -> center.y - array[index] -> center.y, 2) + pow(array[i] -> center.x - array[index] -> center.x, 2));
-			if ((dist == -1 || dist > newdist) && newdist < 70)
-			{
-				check = i;
-				intersection(array[check] -> center.x, array[check] -> center.y, 35, array[index] -> center.x, array[index] -> center.y, 40, array[index]);
-				dist = newdist;
-			}
-		}
-		i++;
-	}
-	//intersection(array[check] -> center.x, array[check] -> center.y, 35, array[index] -> center.x, array[index] -> center.y, 40, array[index]);
-	handle_dir(array[index]);
-}
 
 void	move_boids(t_boid **array, int number)
 {
@@ -80,9 +48,9 @@ void	move_boids(t_boid **array, int number)
 	while(i < number)
 	{
 
-		update_direction(array, number, i);
 		handle_EOW(array, i);
-		//handle_dir(array[i]);
+		collision_avoidance(array, number, i);
+		handle_dir(array[i]);
 		i++;
 	}
 }

@@ -14,13 +14,13 @@ int main(int argc, char **argv)
 	printf("ok\n");
 
 
-	SDL_Window *window;                    // Declare a pointer
+	SDL_Window *mainWindow;                    // Declare a pointer
 	SDL_Renderer *renderer;
 	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_Event evenements = {0};
 	end = 0;
-	window = SDL_CreateWindow(
+	mainWindow = SDL_CreateWindow(
 			"boids",                  // window title
 			SDL_WINDOWPOS_UNDEFINED,           // initial x position
 			SDL_WINDOWPOS_UNDEFINED,           // initial y position
@@ -28,14 +28,14 @@ int main(int argc, char **argv)
 			SCREEN_HEIGHT,                      // height, in pixels
 			SDL_WINDOW_OPENGL                  // flags - see below
 			);
-	if (window == NULL)
+	if (mainWindow == NULL)
 	{
 		// In the case that the window could not be made...
 		printf("Could not create window: %s\n", SDL_GetError());
 		return 1;
 	}
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
 
 	while(!end)
 	{
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 		SDL_RenderClear(renderer);
 	}
 
-	SDL_DestroyWindow(window);
+	SDL_DestroyWindow(mainWindow);
 	SDL_Quit();
 	return EXIT_SUCCESS;
 }

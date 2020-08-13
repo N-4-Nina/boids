@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define MAX_SEE_AHEAD 2
 
 typedef	struct	s_point
 {
@@ -13,26 +14,25 @@ typedef	struct	s_point
 	float	y;
 }	t_point;
 
-typedef struct	s_obstacle
-{
-	t_point a;
-	t_point b;
-	t_point c;
-	t_point d;
-}		t_obstacle;
-
 typedef	struct s_boid
 {
+	int		id;
+
 	t_point	center;
 	t_point	dir;
-	int		id;
+	t_point avoidForce;
+
+	//struct s_boid *avoiding;
+
 	float	direction;
 	float speed;
 }		t_boid;
 
-float intersection(float x0, float y0, int r0, float x1, float y1, int r1, t_boid *boid);
+void normalize(t_point *vector);
+
 int	generate_boids(t_boid **array, int number);
 //void	draw_visual_field(t_boid **boids, int nbr, SDL_Renderer *renderer);
+void	collision_avoidance(t_boid **array, int number, int index);
 void	draw_boids(SDL_Renderer *renderer, t_boid **boid, int number);
 void	move_boids(t_boid **array, int number);
 #endif
