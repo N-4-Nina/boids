@@ -1,5 +1,31 @@
 #include "boids.h"
 
+void fillInRange(int index, t_flock *f)
+{
+	int i = 0;
+	int j = 0;
+
+	f->boids[index]-> inRange = 0;
+	while(i < f->size)
+	{
+		f->inRange[i] = NULL;
+		i++;
+	}
+	i = 0;
+
+	while(i < f->size)
+	{
+		if (i != index && two_dis(f->boids[i]->center, f->boids[index]->center) < 150)
+		{
+			//printf("boid n° %d found in range of boid n° %d \n", index, i);
+			f->inRange[j] = f->boids[i];
+			f->boids[index]->inRange++;
+			j++;
+		}
+		i++;
+	}
+}
+
 int	handle_EOW(t_boid **array, int i)
 {
 	int	r;
@@ -28,7 +54,7 @@ int	handle_EOW(t_boid **array, int i)
 	return (r);
 }
 
-void	handle_dir(t_boid *boid)
+void	move(t_boid *boid)
 {
 	t_point new;
 	new.x = boid -> dir.x + boid-> avoidForce.x;
@@ -40,17 +66,20 @@ void	handle_dir(t_boid *boid)
 }
 
 
-void	move_boids(t_boid **array, int number)
+void	move_boids(t_flock *f, int size)
 {
 	int i;
 
 	i = 0;
-	while(i < number)
+	while(i < size)
 	{
 
-		handle_EOW(array, i);
-		collision_avoidance(array, number, i);
-		handle_dir(array[i]);
+		fillInRange(i, f);
+
+		handle_EOW(f->boids, i);
+
+		collision_avoidance(f->boids[i], f->inRange, i);
+		move(f->boids[i]);
 		i++;
 	}
 }

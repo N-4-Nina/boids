@@ -20,7 +20,7 @@ void	draw_boids(SDL_Renderer *renderer, t_boid **boid, int number)
 
 		hx = boid[i] -> center.x + cos(boid[i] -> direction)*10;
 		hy = boid[i] -> center.y + sin(boid[i] -> direction)*10;
-	//	printf("boid %i, %f, %f,\n", i, hx, hy);
+		//printf("boid %i, %f, %f,\n", i, hx, hy);
 		lx = boid[i] -> center.x - cos(boid[i] -> direction + 0.523599)*10;
 		ly = boid[i] -> center.y - sin(boid[i] -> direction + 0.523599)*10;
 

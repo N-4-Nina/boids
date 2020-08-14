@@ -1,38 +1,42 @@
 #include "boids.h"
 
-int	generate_boids(t_boid **array, int number)
+int	generate_boids(t_flock *f)
 {
 	int i;
 	//float	direction;
-	//t_boid	**array;
+	//t_boid	**f->boids;
 
 	i = 0;
-	while (i < number)
+	printf("accessing f...\n");
+	printf("%d\n", f->size);
+	while (i < f->size)
 	{
-		array[i] = malloc(sizeof(t_boid));
-		array[i] -> id = i;
-		array[i] -> center.x = rand() % SCREEN_WIDTH+1;
-		array[i] -> center.y = rand() % SCREEN_HEIGHT+1;
+		//printf("generating boid %d out of %d", i, f->size);
+		f->inRange[i] = malloc(sizeof(t_boid));
+		f->boids[i] = malloc(sizeof(t_boid));
+		f->boids[i] -> id = i;
+		f->boids[i] -> inRange = 0;
+		f->boids[i] -> center.x = rand() % SCREEN_WIDTH+1;
+		f->boids[i] -> center.y = rand() % SCREEN_HEIGHT+1;
 
-		
-		array[i] -> dir.x = (float)rand() / RAND_MAX;
-		array[i] -> dir.y = (float)rand() / RAND_MAX;
+		f->boids[i] -> dir.x = (float)rand() / RAND_MAX;
+		f->boids[i] -> dir.y = (float)rand() / RAND_MAX;
 
 		if (rand() % 2)
-			array[i] -> dir.x = array[i] -> dir.x * -1;
+			f->boids[i] -> dir.x = f->boids[i] -> dir.x * -1;
 		if (rand() % 2)
-			array[i] -> dir.y = array[i] -> dir.y * -1;
+			f->boids[i] -> dir.y = f->boids[i] -> dir.y * -1;
 
 
-		array[i] -> avoidForce.x = 0;
-		array[i] -> avoidForce.y = 0;
+		f->boids[i] -> avoidForce.x = 0;
+		f->boids[i] -> avoidForce.y = 0;
 
-		array[i] -> speed = 0.75;
+		f->boids[i] -> speed = 0.75;
 
-		array[i] -> direction = atan2(array[i] -> dir.y, array[i] -> dir.x);
+		f->boids[i] -> direction = atan2(f->boids[i] -> dir.y, f->boids[i] -> dir.x);
 
-		printf("%f %f \n", array[i] -> dir.x, array[i] -> dir.y);
-		//printf("direction = %f\n", array[i] -> direction);
+		printf("%f %f \n", f->boids[i] -> dir.x, f->boids[i] -> dir.y);
+		//printf("direction = %f\n", f->boids[i] -> direction);
 
 		i++;
 	}

@@ -8,15 +8,19 @@ int main(int argc, char **argv)
 
 
 	int nbr = atoi(argv[1]);
-	t_boid	*array[nbr];
+	t_flock	flock;
+	//flock = malloc(sizeof(t_flock));
+	t_boid	*boids[nbr];
+	flock.size = nbr;
+	flock.boids = boids;
 	printf("ok\n");
-	generate_boids(array, nbr);
+	generate_boids(&flock);
 	printf("ok\n");
-
 
 	SDL_Window *mainWindow;                    // Declare a pointer
 	SDL_Renderer *renderer;
 	SDL_Init(SDL_INIT_VIDEO);
+
 
 	SDL_Event evenements = {0};
 	end = 0;
@@ -36,15 +40,12 @@ int main(int argc, char **argv)
 	}
 
 	renderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
-
 	while(!end)
 	{
-		//printf("%f\n", array[0] -> direction);
-		//SDL_SetRenderDrawColor(renderer, 135, 206, 250, 255);
-		//draw_visual_field(array, nbr, renderer);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		draw_boids(renderer, array, nbr);
-		move_boids(array, nbr);
+		draw_boids(renderer, flock.boids, nbr);
+
+		move_boids(&flock, nbr);
 
 		SDL_RenderPresent(renderer);
 		SDL_WaitEventTimeout(&evenements, 0);
