@@ -3,18 +3,26 @@
 int main(int argc, char **argv)
 {
 	int	end;
-	if (argc != 2)
+	int seed;
+	seed = -1;
+	if (argc < 2)
 		return(printf("Need number of boids"));
-
+	if (argc > 4)
+		return(printf("Too much arguments. First is number of boids, second is seed (optional)."));
+	if (argc == 3)
+	{
+		seed = atoi(argv[2]);
+		if (seed < 0)
+			return(printf("Seed must be positive."));
+	}
 
 	int nbr = atoi(argv[1]);
 	t_flock	flock;
-	//flock = malloc(sizeof(t_flock));
 	t_boid	*boids[nbr];
 	flock.size = nbr;
 	flock.boids = boids;
 	printf("ok\n");
-	generate_boids(&flock);
+	generate_boids(&flock, seed);
 	printf("ok\n");
 
 	SDL_Window *mainWindow;                    // Declare a pointer
@@ -45,7 +53,7 @@ int main(int argc, char **argv)
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		draw_boids(renderer, flock.boids, nbr);
 
-		move_boids(&flock, nbr);
+		move_boids(&flock);
 
 		SDL_RenderPresent(renderer);
 		SDL_WaitEventTimeout(&evenements, 0);

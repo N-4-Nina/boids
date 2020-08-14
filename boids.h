@@ -42,9 +42,12 @@ typedef	struct s_flock
 float two_dis(t_point firstPoint, t_point secondPoint);
 void normalize(t_point *vector);
 
-int	generate_boids(t_flock *f);
-//void	draw_visual_field(t_boid **boids, int nbr, SDL_Renderer *renderer);
-void	collision_avoidance(t_boid *looking, t_boid **array, int index);
+int	generate_boids(t_flock *f, int seed);
+
+void	separation(t_boid *looking, t_boid **array, int index);
+void alignment(t_boid *current, t_boid **nearby, int index);
+void cohesion(t_boid *current, t_boid **nearby, int index);
+
 void	draw_boids(SDL_Renderer *renderer, t_boid **boid, int number);
-void	move_boids(t_flock *f, int number);
+void	move_boids(t_flock *f);
 #endif

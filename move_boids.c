@@ -17,6 +17,8 @@ void fillInRange(int index, t_flock *f)
 	{
 		if (i != index && two_dis(f->boids[i]->center, f->boids[index]->center) < 150)
 		{
+			// WOULD BE BETTER WITH AN ANGLE OF VISION RATHER THAN JUST A RADIUS
+
 			//printf("boid n° %d found in range of boid n° %d \n", index, i);
 			f->inRange[j] = f->boids[i];
 			f->boids[index]->inRange++;
@@ -56,29 +58,34 @@ int	handle_EOW(t_boid **array, int i)
 
 void	move(t_boid *boid)
 {
+	/*
 	t_point new;
-	new.x = boid -> dir.x + boid-> avoidForce.x;
-	new.y = boid -> dir.y + boid-> avoidForce.y;
+	new.x = boid -> dir.x;
+	new.y = boid -> dir.y;
 	normalize(&new);
-
-	boid -> center.x += new.x * boid -> speed;
-	boid -> center.y += new.y * boid -> speed;
+*/
+	boid -> center.x += boid -> dir.x * boid -> speed;
+	boid -> center.y += boid -> dir.y * boid -> speed;
 }
 
 
-void	move_boids(t_flock *f, int size)
+void	move_boids(t_flock *f)
 {
 	int i;
 
 	i = 0;
-	while(i < size)
+	while(i < f->size)
 	{
-
 		fillInRange(i, f);
-
 		handle_EOW(f->boids, i);
 
-		collision_avoidance(f->boids[i], f->inRange, i);
+		separation(f->boids[i], f->inRange, i);
+		alignment(f->boids[i], f->inRange, i);
+		cohesion(f->boids[i], f->inRange, i);
+
+		normalize(&f->boids[i] -> dir);
+		f->boids[i] -> direction = atan2(f->boids[i] -> dir.y, f->boids[i] -> dir.x);
+
 		move(f->boids[i]);
 		i++;
 	}
