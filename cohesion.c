@@ -12,9 +12,9 @@ t_point find_Center(t_boid **nearby)
     center.y += nearby[i]-> center.y;
     i++;
   }
-  center.x /= i+1;
-  center.y /= i+1;
 
+  center.x /= i;
+  center.y /= i;
   return (center);
 }
 
@@ -25,6 +25,9 @@ void cohesion(t_boid *current, t_boid **nearby, int index)
 
   t_point center = find_Center(nearby);
 
+  center.x -= current->center.x;
+  center.y -= current->center.y;
+  
   normalize(&center);
 
   current->dir.x += center.x * 0.012;

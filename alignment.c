@@ -12,10 +12,9 @@ t_point average_Direction(t_boid **nearby)
     average.y += nearby[i]->dir.y;
     i++;
   }
-  if (i == 0)
-    return (average);
-  average.x /= i+1;
-  average.y /= i+1;
+
+  average.x /= i;
+  average.y /= i;
   return (average);
 }
 

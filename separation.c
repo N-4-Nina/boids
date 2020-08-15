@@ -5,33 +5,21 @@ void check_collision(int ref, t_boid *current, t_boid *looked, int *foundOne, fl
   int i = 0;
   float dist;
 
-  t_point ahead;
 
-  ahead = current -> center;
-  ahead.x += current -> dir.x * 10;
-  ahead.y += current -> dir.y * 10;
-
-  while (i < 30)
+  dist = two_dis(current->center, looked -> center);
+  if (dist < 30 && (*foundOne == 0 || (*foundOne ==  1 && dist < *closestDist)))
   {
 
-      dist = two_dis(ahead, looked -> center);
-      if (dist < 30 && (*foundOne == 0 || (*foundOne ==  1 && dist < *closestDist)))
-      {
-
-        *foundOne = 1;
-        *closestDist = dist;
-        *closestIndex = ref;
-        *closestAhead = ahead;
-      }
-      ahead.x += current -> dir.x * 5;
-      ahead.y += current -> dir.y * 5;
-
-      i++;
+    *foundOne = 1;
+    *closestDist = dist;
+    *closestIndex = ref;
+    //*closestAhead = ahead;
   }
+
 
 }
 
-void	separation(t_boid *current, t_boid **array, int index)
+void	separation(t_boid *current, t_boid **nearby, int index)
 {
   int i;
   int foundOne;
@@ -46,13 +34,11 @@ void	separation(t_boid *current, t_boid **array, int index)
   closestDist = 0;
   while (i < current->inRange)
   {
-    check_collision(i, current, array[i], &foundOne, &closestDist, &closestIndex, &closestAhead);
+    check_collision(i, current, nearby[i], &foundOne, &closestDist, &closestIndex, &closestAhead);
     i++;
   }
-  if (!foundOne)
+  /*if (!foundOne)
   {
-    //array[index] -> avoidForce.x = 0;
-    //array[index] -> avoidForce.y = 0;
 
     if (current -> avoidForce.x > 0)
       current -> avoidForce.x = (current -> avoidForce.x - 0.025 >= 0) ? current -> avoidForce.x - 0.025 : 0;
@@ -64,16 +50,17 @@ void	separation(t_boid *current, t_boid **array, int index)
     if (current -> avoidForce.y < 0)
       current -> avoidForce.y = (current -> avoidForce.y + 0.025 <= 0) ? current -> avoidForce.y + 0.025 : 0;
 
-  }
+  }*/
   if (foundOne)
   {
-    avoidForce.x = (closestAhead.x - array[closestIndex] -> center.x);
-    avoidForce.y = (closestAhead.y - array[closestIndex] -> center.y);
+    avoidForce.x = (current -> center.x - nearby[closestIndex] -> center.x);
+    avoidForce.y = (current -> center.y - nearby[closestIndex] -> center.y);
     normalize(&avoidForce);
-    avoidForce.x *= 0.025;
-    avoidForce.y *= 0.025;
-    current -> avoidForce.x += avoidForce.x;
-    current -> avoidForce.y += avoidForce.y;
+    avoidForce.x *= 0.050;
+    avoidForce.y *= 0.050;
+
+    //current -> avoidForce.x += avoidForce.x;
+    //current -> avoidForce.y += avoidForce.y;
 
     current -> dir.x += avoidForce.x;
     current -> dir.y += avoidForce.y;

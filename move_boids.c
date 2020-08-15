@@ -1,5 +1,27 @@
 #include "boids.h"
 
+int isInFOV(t_boid *current, t_boid *considered)
+{
+	if(two_dis(current->center, considered->center) > 50)
+		return (0);
+
+	t_point blindCenter;
+	t_point centerToCenter;
+	float	dotProd;
+
+	centerToCenter.x = considered->center.x - current->center.x;
+	centerToCenter.y = considered->center.y - current->center.y;
+
+	blindCenter.x = -current->dir.x;
+	blindCenter.y = -current->dir.y;
+
+	dotProd = centerToCenter.x * blindCenter.x + centerToCenter.y * blindCenter.y;
+	if (acos(dotProd) < 0.523599)
+		return (0);
+	else
+		return (1);
+}
+
 void fillInRange(int index, t_flock *f)
 {
 	int i = 0;
@@ -15,7 +37,7 @@ void fillInRange(int index, t_flock *f)
 
 	while(i < f->size)
 	{
-		if (i != index && two_dis(f->boids[i]->center, f->boids[index]->center) < 150)
+		if (i != index && isInFOV(f->boids[index], f->boids[i]))
 		{
 			// WOULD BE BETTER WITH AN ANGLE OF VISION RATHER THAN JUST A RADIUS
 
@@ -58,12 +80,6 @@ int	handle_EOW(t_boid **array, int i)
 
 void	move(t_boid *boid)
 {
-	/*
-	t_point new;
-	new.x = boid -> dir.x;
-	new.y = boid -> dir.y;
-	normalize(&new);
-*/
 	boid -> center.x += boid -> dir.x * boid -> speed;
 	boid -> center.y += boid -> dir.y * boid -> speed;
 }
@@ -76,6 +92,9 @@ void	move_boids(t_flock *f)
 	i = 0;
 	while(i < f->size)
 	{
+		if (i == 0)
+			printf("%f, %f\n",f->boids[i] -> dir.x, f->boids[i]->dir.y);
+
 		fillInRange(i, f);
 		handle_EOW(f->boids, i);
 
