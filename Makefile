@@ -1,7 +1,6 @@
 NAME = boids
 OS	= $(shell uname)
 DIR_S = srcs
-INCLUDES = -I include/
 CC = clang
 CFLAGS	= -O3 -Wall -Wextra -Werror
 DEFINE = -D SCREEN_WIDTH=1920 -D SCREEN_HEIGHT=1080
@@ -24,12 +23,12 @@ else
 endif
 
 .c.o:
-	${CC} ${CFLAGS} ${DEFINE} -c $< -o ${<:.c=.o} ${INCLUDES}
+	${CC} ${CFLAGS} ${DEFINE} -c $< -o ${<:.c=.o} 
 
 all : $(NAME)
 
 ${NAME}: ${OBJS}
-		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIBS} -o ${NAME}
+		${CC} ${CFLAGS} ${OBJS} ${LIBS} -o ${NAME}
 
 $(DIR_O)/%.o: $(DIR_S)/%.c $(HEADER)/*.h
 	@mkdir -p objs
