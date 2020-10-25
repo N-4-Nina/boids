@@ -44,9 +44,9 @@ void normalize(t_point *vector);
 
 int	generate_boids(t_flock *f, int seed);
 
-void	separation(t_boid *looking, t_boid **array, int index);
-void alignment(t_boid *current, t_boid **nearby, int index);
-void cohesion(t_boid *current, t_boid **nearby, int index);
+void	separation(t_boid *looking, t_boid **array);
+void alignment(t_boid *current, t_boid **nearby);
+void cohesion(t_boid *current, t_boid **nearby);
 
 void	draw_boids(SDL_Renderer *renderer, t_boid **boid, int number);
 void	move_boids(t_flock *f);
